@@ -1,50 +1,108 @@
-# Welcome to your Expo app 👋
+# 🎬 Movie Review Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+React Native mobile app with Express.js backend for browsing movies and writing reviews.
 
-## Get started
+## 📱 Features
+- Browse movie list with posters
+- View movie details (plot, director, genre)
+- Read existing reviews
+- Submit new reviews with star ratings
 
-1. Install dependencies
+## 🏗️ Tech Stack
+- **Frontend**: React Native (Expo) + TypeScript
+- **Navigation**: React Navigation Stack
+- **Backend**: Express.js + MySQL
+- **API Client**: Axios
 
-   ```bash
-   npm install
-   ```
+## 📁 Project Structure
 
-2. Start the app
 
-   ```bash
-   npx expo start
-   ```
 
-In the output, you'll find options to open the app in a
+movie-review-frontend/ (This repo)
+├── src/screens/ # 4 app screens
+├── src/services/api.ts # API configuration
+├── App.tsx # Main navigation
+└── app.json
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+movie-review-backend/ (Separate repo)
+├── controllers/ # API logic
+├── routes/ # Endpoints
+└── server.js
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
 
-When you're ready, run:
 
-```bash
-npm run reset-project
-```
+**Backend Repo:** `https://github.com/NRRithik/movie-review-backend`
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🚀 Quick Setup
 
-## Learn more
+### 1. Database Setup
+```sql
+CREATE DATABASE movie_review_app;
+USE movie_review_app;
 
-To learn more about developing your project with Expo, look at the following resources:
+CREATE TABLE movies (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255),
+    year INT,
+    genre VARCHAR(100),
+    director VARCHAR(255),
+    plot TEXT,
+    poster_url VARCHAR(500)
+);
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+CREATE TABLE reviews (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    movie_id INT,
+    author_name VARCHAR(100) DEFAULT 'Anonymous',
+    rating INT CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
 
-## Join the community
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Backend Setup
+bash
+cd movie-review-backend
+npm install
+# Create .env with DB credentials
+npm run dev
+
+
+
+Frontend Setup
+bash
+cd movie-review-frontend
+npm install
+npx expo install react-native-screens react-native-safe-area-context
+npm install @react-navigation/native @react-navigation/stack axios
+
+
+Update IP in src/services/api.ts:
+const API_BASE_URL = 'http://YOUR_IP:5000/api'; // Your computer's IP
+
+
+
+API Endpoints
+Method	Endpoint	Description
+GET	/api/movies	Get all movies
+GET	/api/movies/:id	Get movie details
+GET	/api/movies/:id/reviews	Get movie reviews
+POST	/api/movies/:id/reviews	Add new review
+
+
+Run Mobile App
+bash
+npx expo start
+
+Scan QR with Expo Go app (physical device)
+Press 'a' for Android emulator
+Press 'i' for iOS simulator
+
+Troubleshooting
+Network Error: Update IP in api.ts
+Backend Not Running: npm run dev in backend folder
+MySQL Issues: Check .env credentials
+
+
